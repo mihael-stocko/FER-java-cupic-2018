@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Galerija slika</title>
+		
+		<style>
+			body {
+				background-color: powderblue;
+			}
+			
+			h1   {
+				font-family: Arial, Helvetica, sans-serif;
+				color: blue;
+			}
+			
+			p    {
+				font-family: Arial, Helvetica, sans-serif;
+				color: red;
+			}
+		</style>
+		
+		<script>
+			function showImage(title, tags) {
+				let xmlhttp;
+				
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				
+				xmlhttp.onreadystatechange = function() {
+					if(xmlhttp.readyState==4 && xmlhttp.status==200) {
+						let description = xmlhttp.responseText;
+						document.getElementById("display").innerHTML = "<p>" + title + "</p>";
+						document.getElementById("display").innerHTML += "<p>" + description + "</p>";
+						document.getElementById("display").innerHTML += "<p>" + tags + "</p>";
+						
+						let image = document.createElement("img");
+						image.src = "/galerija/servlets/getImage?title=" + title;
+						document.getElementById("display").appendChild(image);
+					}
+				}
+			
+				xmlhttp.open("GET", "rest/imageinfo/description?title=" + title, true);
+				xmlhttp.send();
+			}
+			
+			function showThumbnails(tag, tags) {
+				let xmlhttp;
+				
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				
+				xmlhttp.onreadystatechange = function() {
+					if(xmlhttp.readyState==4 && xmlhttp.status==200) {
+						let text = xmlhttp.responseText;
+						let images = JSON.parse(text);
+						let thumbnails;
+						document.getElementById("thumbnails").innerHTML = "";
+						let index = 0;
+						for(let i in images) {
+							if(images[i].indexOf(tag) > -1) {
+								let img = document.createElement("img");
+								img.src = "/galerija/servlets/getThumbnail?title=" + i;
+								img.onmousedown = function() {
+									showImage(i, images[i]);
+								}
+								document.getElementById("thumbnails").appendChild(img);
+								index++;
+								if(index === 5) {
+									document.getElementById("thumbnails").innerHTML += "<br/>";
+									index = 0;
+								}
+							}
+						}
+					}
+				}
+
+				xmlhttp.open("GET", "rest/imageinfo/images", true);
+				xmlhttp.send();
+			}
+		
+			function getTags() {
+				let xmlhttp;
+				
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				
+				xmlhttp.onreadystatechange = function() {
+					if(xmlhttp.readyState==4 && xmlhttp.status==200) {
+						let text = xmlhttp.responseText;
+						let tagsList = JSON.parse(text);
+						let tags = tagsList["tags"];
+						for(let i = 0; i < tags.length; i++) {
+							let button = document.createElement("button");
+							let text = document.createTextNode(tags[i]);
+							button.appendChild(text);
+							button.onclick = function() {
+								showThumbnails(tags[i], tags);
+							}
+							document.getElementById("buttons").appendChild(button);
+						}
+					}
+				}
+
+				xmlhttp.open("GET", "rest/imageinfo/tags", true);
+				xmlhttp.send();
+			}
+		</script>
+	</head>
+	<body>
+		<h1>Galerija slika</h1>
+	
+		<script>
+			getTags();
+		</script>
+		
+		<div id = "buttons"></div>
+		<div id = "thumbnails"></div>
+		<div id = "display"></div>
+	</body>

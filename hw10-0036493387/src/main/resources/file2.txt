@@ -1,0 +1,6 @@
+Number of people in the car
+Frequency
+3,22 5,4 1,8 4,10 2,20
+0
+22
+2

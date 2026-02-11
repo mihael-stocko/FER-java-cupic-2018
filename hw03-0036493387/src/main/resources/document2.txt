@@ -1,0 +1,11 @@
+Ovo je prvi tekst. Ja volim tekst. Ja jako volim tekst.
+{$="string" var 2 3 4 + -3.4 - @funkcija "drugi string"$}
+Ovo je sad već drugi tekst. {$="echo usred teksta"$} Bijaše to drugi tekst.
+{$FOR var1 "str" 2 3$}
+	Testirajmo for petlju.
+	{$FOR var2 1 2 3$}
+		Da vidimo kako se gnijezdi.
+	{$END$}
+{$END$}
+Po svemu sudeći, sve je u redu.
+Escape sekvence: \\ \{ \\

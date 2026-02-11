@@ -1,0 +1,69 @@
+package hr.fer.zemris.java.hw07.shell.commands;
+
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
+
+import hr.fer.zemris.java.hw07.shell.Environment;
+import hr.fer.zemris.java.hw07.shell.ShellCommand;
+import hr.fer.zemris.java.hw07.shell.ShellIOException;
+import hr.fer.zemris.java.hw07.shell.ShellStatus;
+
+/**
+ * This command removes one path from the stack. The current directory is not changed.
+ * Takes no arguments.
+ * 
+ * @author Mihael Stočko
+ *
+ */
+public class DropdCommand implements ShellCommand {
+	
+	/**
+	 * A string literal used for mapping the stack in a map.
+	 */
+	public static final String cdstack = "cdstack";
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ShellStatus executeCommand(Environment env, String arguments) throws ShellIOException {
+		if(arguments.length() != 0) {
+			env.writeln("The command " + getCommandName() + " expects zero arguments.");
+			return ShellStatus.CONTINUE;
+		}
+		
+		if(env.getSharedData(cdstack) == null || ((Stack<Path>)env.getSharedData(cdstack)).isEmpty()) {
+			env.writeln("There are no paths on the stack.");
+			return ShellStatus.CONTINUE;
+		}
+		
+		((Stack<Path>)env.getSharedData(cdstack)).pop();
+		env.writeln("Done.");
+		
+		return ShellStatus.CONTINUE;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getCommandName() {
+		return "dropd";
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<String> getCommandDescription() {
+		List<String> list = new LinkedList<>();
+		list.add("This command removes one path from the stack. The current directory");
+		list.add("is not changed.");
+		list.add("Takes no arguments.");
+		
+		return Collections.unmodifiableList(list);
+	}
+}

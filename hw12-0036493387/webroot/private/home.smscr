@@ -1,0 +1,35 @@
+{$= "text/html" @setMimeType $}
+<html>
+ <head>
+  <title>Index 2</title>
+  <style>
+   body \{background-color: #{$="background" "7F7F7F" @tparamGet$};}
+  </style>
+ </head>
+ <body>
+  <h3>Scripts</h3>
+  <a href="scripts/osnovni.smscr">osnovni.smscr</a><br>
+  <a href="scripts/brojPoziva.smscr">brojPoziva.smscr</a><br>
+  <a href="scripts/fibonaccih.smscr">fibonaccih.smscr</a><br>
+  <p>
+  <h3>Workers</h3>
+  <a href="hello">HelloWorker</a><br>
+  <a href="cw">CircleWorker</a>
+  <p>
+  <form action="/calc" method="get">
+   a: <input type="text" name="a"><br>
+   b: <input type="text" name="b"><br>
+   <input type="submit" value="Submit">
+  </form>
+  <p>
+  <form action="/setbgcolor" method="get">
+   <select name="bgcolor">
+    <OPTION value="FF0000">Red</OPTION>
+    <OPTION value="00FF00">Green</OPTION>
+    <OPTION value="0000FF">Blue</OPTION>
+    <OPTION value="FF69B4">Pink</OPTION>
+   </select>
+   <input type="submit" value="Submit">
+  </form>
+ </body>
+</html>
